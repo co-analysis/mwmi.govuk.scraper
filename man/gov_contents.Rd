@@ -10,5 +10,10 @@ gov_contents(links)
 \item{links}{links on gov.uk to check for files to download}
 }
 \description{
-Check gov.uk search results for potential files to download
+Takes a vector of results for pages and scrapes links to embedded data
+returns a list as long as the input with:
+url: original url requested
+meta_data: data.table of meta data including org and date
+data_titles: a vector of text titles for data files
+data_links: a vector of links to data files
 }
