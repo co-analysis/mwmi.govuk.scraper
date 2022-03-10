@@ -2,7 +2,7 @@ gov_contents(a$link[1:2])
 
 library(httr)
 library(rvest)
-b <- modify_url("https://www.gov.uk/api/content", path = a$link[1])
+b <- httr::modify_url("https://www.gov.uk/api/content", path = a$link[1])
 
 # Get the data links
 # get_data_links(b)

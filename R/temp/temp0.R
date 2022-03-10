@@ -1,7 +1,10 @@
-library(devtools)
-library(usethis)
+# library(devtools)
+# library(usethis)
 
-install()
+devtools::install()
 library(mwmi.govuk.scraper)
 a <- gov_search()
 
+
+devtools::document()
+usethis::use_package('readODS')

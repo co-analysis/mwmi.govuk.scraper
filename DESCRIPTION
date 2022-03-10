@@ -18,7 +18,11 @@ Imports:
     httr,
     jsonlite,
     ratelimitr,
-    rvest
+    readODS,
+    readr,
+    readxl,
+    rvest,
+    unpivotr
 Depends: 
     dplyr,
     magrittr,
