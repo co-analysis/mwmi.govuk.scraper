@@ -9,6 +9,7 @@
 #'
 #' @param links links on gov.uk to check for files to download
 #' @import httr
+#' @export
 
 gov_contents <- function(links) {
   # url format
