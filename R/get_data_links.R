@@ -30,7 +30,7 @@ get_data_links <- function(url_to_scrape) {
   # Find text titles for files
   data_titles <- html_text %>%
     rvest::html_nodes(".attachment .attachment-details h3") %>%
-    rvest::html_text
+    rvest::html_text()
 
   print(paste0(length(data_links)," results from ",url_to_scrape))
 
