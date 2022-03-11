@@ -3,6 +3,7 @@
 #' Format a labelled data set
 #'
 #' @param lab_data_set rds file to check
+#' @import tidyr
 #' @export
 
 #
@@ -11,7 +12,7 @@ labelled_data_format <- function(lab_data_set) {
   meta_lab <- lab_data_set %>%
     filter(group%in%c("date","org"),!is.na(chr)) %>%
     select(group,sub_group,row,chr) %>%
-    pivot_wider(id_cols=row,names_from=c(group,sub_group),names_sep="_",values_from=chr)
+    tidyr::pivot_wider(id_cols=row,names_from=c(group,sub_group),names_sep="_",values_from=chr)
 
   # Extract data, format, and merge back in the metadata
   blank_cols=c(dbl=NA_real_,chr=NA_character_) # to fill in columns if they don't exist - depends on import
