@@ -4,6 +4,7 @@
 #'
 #' @param lab_data_set rds file to check
 #' @import tidyr
+#' @import tibble
 #' @export
 
 #
@@ -17,7 +18,7 @@ labelled_data_format <- function(lab_data_set) {
   # Extract data, format, and merge back in the metadata
   blank_cols=c(dbl=NA_real_,chr=NA_character_) # to fill in columns if they don't exist - depends on import
   formed_data <- lab_data_set %>%
-    add_column(!!!blank_cols[setdiff(names(blank_cols),names(.))]) %>%
+    tibble::add_column(!!!blank_cols[setdiff(names(blank_cols),names(.))]) %>%
     filter(!group%in%c("date","org"),!is.na(chr) | !is.na(dbl),!is.na(group)) %>%
     mutate(value=gsub("[^0-9\\.\\-]","",chr) %>% as.numeric) %>% # get rid of any non numeric characters (e.g. £ ,)
     mutate(value=ifelse(is.na(value),as.numeric(dbl),value)) %>%
