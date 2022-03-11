@@ -7,24 +7,31 @@
 #' @param url_stem stem for url
 
 get_gov_file <- function(file_url, dl_stem, url_stem) {
-  # Get file location after the stem, used to ensure uniqueness
-  folder_stub <- file_url %>%
-    gsub(paste0("^",url_stem),"",.) %>%
-    gsub("/[^/]+$","",.)
-  # Create directory
-  dir.create(paste0(dl_stem,folder_stub),showWarnings=FALSE,recursive=TRUE)
+  if (startsWith(file_url,url_stem)) { # Check that URL matches specified pattern
 
-  # Get file name
-  file_name <- gsub(".*/([^/]+$)","\\1",file_url)
+    # Get file location after the stem, used to ensure uniqueness
+    folder_stub <- file_url %>%
+      gsub(paste0("^",url_stem),"",.) %>%
+      gsub("/[^/]+$","",.)
+    # Create directory
+    dir.create(paste0(dl_stem,folder_stub),showWarnings=FALSE,recursive=TRUE)
 
-  # Make DL location
-  dl_location <- paste0(dl_stem, folder_stub, "/", file_name)
+    # Get file name
+    file_name <- gsub(".*/([^/]+$)","\\1",file_url)
 
-  # Download
-  dl_result <- try(download.file(file_url, dl_location, quiet=TRUE, mode="wb"),silent=TRUE)[1] %>%
-    ifelse(.==0,"Successful",.)
-  print(paste0(file_name," ",dl_result))
+    # Make DL location
+    dl_location <- paste0(dl_stem, folder_stub, "/", file_name)
 
-  # Return
-  data.frame(data_link=file_url,dl_location,dl_result)
+    # Download
+    dl_result <- try(download.file(file_url, dl_location, quiet=TRUE, mode="wb"),silent=TRUE)[1] %>%
+      ifelse(.==0,"Successful",.)
+    print(paste0(file_name," ",dl_result))
+
+    # Return
+    data.frame(data_link=file_url,dl_location,dl_result)
+
+  } else {
+    # Return error if URL doesn't match specified pattern
+    data.frame(data_link=file_url,dl_location=NA,dl_result="Malformed URL")
+  }
 }
