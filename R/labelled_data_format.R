@@ -20,7 +20,8 @@ labelled_data_format <- function(lab_data_set) {
   formed_data <- lab_data_set %>%
     tibble::add_column(!!!blank_cols[setdiff(names(blank_cols),names(.))]) %>%
     filter(!group%in%c("date","org"),!is.na(chr) | !is.na(dbl),!is.na(group)) %>%
-    mutate(value=gsub("\xa3","",chr) %>% gsub("[^0-9\\.\\-]","",.) %>% as.numeric) %>% # get rid of any non numeric characters (e.g. £ ,)
+    # mutate(value=gsub("\xa3","",chr) %>% gsub("[^0-9\\.\\-]","",.) %>% as.numeric) %>% # get rid of any non numeric characters (e.g. £ ,)
+    mutate(value=iconv(chr,"UTF-8","UTF-8",sub="") %>% gsub("[^0-9\\.\\-]","",.) %>% as.numeric) %>% # get rid of any non numeric characters (e.g. £ ,)
     mutate(value=ifelse(is.na(value),as.numeric(dbl),value)) %>%
     select(row,group,sub_group,measure,value,file) %>%
     inner_join(meta_lab) %>% # Drops any rows without metadata
