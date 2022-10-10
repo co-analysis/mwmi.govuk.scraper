@@ -23,8 +23,14 @@ get_gov_file <- function(file_url, dl_stem, url_stem) {
     dl_location <- paste0(dl_stem, folder_stub, "/", file_name)
 
     # Download
-    dl_result <- try(download.file(file_url, dl_location, quiet=TRUE, mode="wb"),silent=TRUE)[1] %>%
-      ifelse(.==0,"Successful",.)
+    # Check file size
+    download_size <- as.numeric(httr::HEAD(file_url)$headers$`content-length`)
+    if (download_size >= 25000000) {
+      dl_result <- "File too large"
+    } else {
+      dl_result <- try(download.file(file_url, dl_location, quiet=TRUE, mode="wb"),silent=TRUE)[1] %>%
+        ifelse(.==0,"Successful",.)
+    }
     print(paste0(file_name," ",dl_result))
 
     # Return
