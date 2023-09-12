@@ -22,15 +22,21 @@ get_data_links <- function(url_to_scrape) {
   meta_data <- data.frame(terms=meta_terms,definitions=meta_definitions)
 
   # Find links to attached data in the html
+  # data_links <- html_text %>% rvest::html_nodes(".attachment .attachment-details a") %>%
+  #   rvest::html_attr("href") %>% grep("((ods)|(csv)|(xls)|(xlsx))$",
+  #                                     ., value = TRUE, ignore.case = TRUE)
   data_links <- html_text %>%
-    rvest::html_nodes(".attachment .attachment-details a") %>%
+    rvest::html_nodes(".gem-c-attachment .gem-c-attachment__details a") %>%
     rvest::html_attr("href") %>%
-    grep("((ods)|(csv)|(xls)|(xlsx))$",.,value=TRUE,ignore.case=TRUE)
+    grep("((ods)|(csv)|(xls)|(xlsx))$", ., value = TRUE, ignore.case = TRUE)
 
   # Find text titles for files
+  # data_titles <- html_text %>%
+  #   rvest::html_nodes(".attachment .attachment-details h3") %>%
+  #   rvest::html_text()
   data_titles <- html_text %>%
-    rvest::html_nodes(".attachment .attachment-details h3") %>%
-    rvest::html_text()
+    rvest::html_nodes(".gem-c-attachment .gem-c-attachment__details h2") %>%
+    rvest::html_text(trim=TRUE)
 
   print(paste0(length(data_links)," results from ",url_to_scrape))
 
